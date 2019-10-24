@@ -1,0 +1,80 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: "Gothic A1", sans-serif;
+  font-weight: 700;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #07f9ac, #0785f9);
+}
+
+.calculator-grid {
+  margin: 100px auto;
+  width: 55%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: minmax(120px, auto) repeat(5, 1fr);
+  /* we want the calculator display's height to be flexible so we set the max to auto*/
+  grid-gap: 0.2em;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* button styling */
+.calculator-block {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.calculator-block:hover {
+  background-color: rgba(245, 8, 193, 0.7);
+  cursor: pointer;
+}
+
+.calculator-block p {
+  color: black;
+  text-align: center;
+}
+
+/* calculator display styling */
+.calculator-block-span4 {
+  grid-column: 1 / -1;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  word-wrap: break-word;
+  word-break: break-all;
+  padding: 20px;
+}
+
+.calculator-block-span4 p {
+  color: white;
+  margin: 0;
+}
+
+.current-input {
+  font-size: 2em;
+}
+
+/* AC and button styling */
+.calculator-block-span2 {
+  grid-column: span 2;
+  background-color: rgba(255, 255, 255, 0.4);
+  position: relative;
+}
+
+.calculator-block-span2:hover {
+  background-color: rgba(245, 8, 193, 0.7);
+  cursor: pointer;
+}
+
+.calculator-block-span2 p {
+  color: black;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+}
