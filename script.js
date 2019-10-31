@@ -18,55 +18,65 @@ class Calculator {
     //add innertext to currentInput element
     this.currentInputElement.innerText = this.currentInput;
     //add innertext to previousInput element
-    this.previousInputElement.innerText = this.previousInput;
+    if (this.operation != null) {
+      this.previousInputElement.innerText = `${this.previousInput} ${this.operation}`;
+    } else {
+      this.previousInputElement.innerText = this.previousInput;
+    }
   }
 
   clear() {
     this.currentInput = "";
     this.previousInput = "";
-    this.updateDisplay();
+    this.operation = undefined;
   }
 
   delete() {
     //get the last string and delete it
-    this.currentInput = this.currentInput.slice(
-      0,
-      this.currentInput.length - 1
-    );
-    this.updateDisplay();
+    this.currentInput = this.currentInput.slice(0, -1);
   }
 
   chooseOperation(operation) {
-    //only enable this operation once
-    if (
-      this.previousInput !== "" &&
-      this.previousInput.includes("÷" || "*" || "+" || "-")
-    )
-      return;
-    //if possible display all previous inputs
-    else if (this.currentInput !== "" && this.previousInput !== "") {
-      console.log("hey");
-      let calculation =
-        parseFloat(this.previousInput) + parseFloat(this.currentInput);
-      this.previousInput = String(calculation) + " " + this.operation;
-      this.currentInput = "";
-      this.updateDisplay();
-    } else {
-      this.operation = String(operation);
-      this.previousInput = this.currentInput + " " + this.operation;
-      this.currentInput = "";
-      this.updateDisplay();
+    //if you click operand without any other inputs don't display anything
+    if (this.currentInput === "") return;
+    //
+    if (this.previousInput !== "") {
+      this.calculate();
     }
+
+    this.operation = operation;
+    this.previousInput = this.currentInput;
+    this.currentInput = "";
   }
 
   calculate() {
-    //only enable once
-    let calculation =
-      parseFloat(this.previousInput) + parseFloat(this.currentInput);
-    this.currentInput = String(calculation);
+    let calculation;
+    let prev = parseFloat(this.previousInput);
+    let current = parseFloat(this.currentInput);
+
+    //if you click equals sign without any other inputs don't run
+    if (isNaN(prev) || isNaN(current)) return;
+
+    switch (this.operation) {
+      case "+":
+        calculation = prev + current;
+        break;
+      case "-":
+        calculation = prev - current;
+        break;
+      case "*":
+        calculation = prev * current;
+        break;
+      case "÷":
+        calculation = prev / current;
+        break;
+      default:
+        return;
+    }
+
+    this.currentInput = calculation;
+    this.operation = undefined;
     this.previousInput = "";
-    this.updateDisplay();
-    this.currentInput = "";
   }
 }
 
@@ -87,20 +97,25 @@ numberButtons.forEach(button => {
 
 clearButton.addEventListener("click", () => {
   calculator.clear();
+  calculator.updateDisplay();
 });
 
 deleteButton.addEventListener("click", () => {
   calculator.delete();
+  calculator.updateDisplay();
 });
 
 operationButtons.forEach(button => {
   button.addEventListener("click", () => {
     calculator.chooseOperation(button.innerText);
+    calculator.updateDisplay();
   });
 });
 
 equalsButton.addEventListener("click", () => {
   calculator.calculate();
+  calculator.updateDisplay();
+  calculator.clear();
 });
 
 const calculator = new Calculator(previousInputElement, currentInputElement);
